@@ -16,10 +16,8 @@ if __name__ == "__main__":
     data_dir = tf.keras.utils.get_file('flower_photos', origin=dataset_url, untar=True)
     data_dir = pathlib.Path(data_dir)
 
-    epochs = 15
-    optimizer = 'adam'
-
-    roses = list(data_dir.glob('roses/*'))
+    epochs = 25
+    optimizer = 'sgd'
 
     train_dataset = tf.keras.utils.image_dataset_from_directory(
         data_dir,
@@ -47,15 +45,16 @@ if __name__ == "__main__":
     model = keras.Sequential()
     model.add(InputLayer((180, 180, 3)))
     model.add(Rescaling(1. / 255))
-    model.add(Conv2D(32, (2, 2), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Conv2D(32, (2, 2), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Conv2D(64, (2, 2), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(32, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(3, 3)))
+    model.add(Conv2D(64, (4, 4), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(4, 4)))
+    model.add(Conv2D(128, (5, 5), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(5, 5)))
     model.add(Flatten())
-    model.add(Dense(64, activation='relu'))
+    model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.5))
+    model.add(Dense(64, activation='relu'))
     model.add(Dense(len(classes), activation='softmax'))
 
     plot_model(model,
